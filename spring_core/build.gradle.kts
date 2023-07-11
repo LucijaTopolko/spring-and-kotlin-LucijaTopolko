@@ -1,10 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.5.10"
+    kotlin("jvm") version "1.7.0"
+    id("org.jetbrains.kotlin.plugin.spring") version "1.7.0" // New plugin
 }
 
-group = "com.infinum.academy"
+group = "src.main.kotlin"
 version = "1.0.0"
 
 repositories {
@@ -13,6 +14,12 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+
+    implementation("org.springframework:spring-context:5.3.20")
+    testImplementation("org.springframework:spring-test:5.3.20")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
+    testImplementation("org.assertj:assertj-core:3.23.1")
+    testImplementation("io.mockk:mockk:1.12.4")
 }
 
 tasks.withType<KotlinCompile> {
@@ -25,3 +32,6 @@ tasks.withType<KotlinCompile> {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+
+
