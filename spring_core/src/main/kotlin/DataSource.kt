@@ -1,7 +1,11 @@
 package src.main.kotlin
 
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
+
+@Component
 data class DataSource(
-    val dbName: String,
-    val username: String,
-    val password: String,
+    @Value("\${db.dbName}") val dbName: String,
+    @Value("\${db.username}") val username: String,
+    @Value("\${db.password}") val password: String,
 )
