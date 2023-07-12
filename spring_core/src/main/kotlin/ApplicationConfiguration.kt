@@ -11,33 +11,19 @@ import org.springframework.core.io.Resource
 @Configuration
 @ComponentScan
 @PropertySource("classpath:info.properties")
-class ApplicationConfiguration {
-    @Value("\${db.dbName}")
-    private lateinit var dbName: String
-
-    @Value("\${db.username}")
-    private lateinit var username: String
-
-    @Value("\${db.password}")
-    private lateinit var password: String
+class ApplicationConfiguration(private val dataSource: DataSource) {
 
     @Value("\${switch}")
     private lateinit var switch: String
-
-    @Bean
-    fun dataSource(): DataSource {
-        return DataSource(dbName, username, password)
-    }
-
     @Bean
     fun carCheckUpsResource(): Resource {
-        return FileSystemResource(dbName)
+        return FileSystemResource(dataSource.dbName)
     }
 
     @Bean
     fun carCheckUpRepository(): CarCheckUpRepository {
         return if (switch == "1") {
-            InMemoryCarCheckUpRepository(dataSource())
+            InMemoryCarCheckUpRepository(dataSource)
         } else {
             InFileCarCheckUpRepository(carCheckUpsResource())
         }
