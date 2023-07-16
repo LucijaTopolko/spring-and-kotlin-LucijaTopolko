@@ -11,4 +11,5 @@ data class Car(
     var year: Year,
     val vin: String,
     var checkUps: MutableList<CarCheckUp> = mutableListOf(),
+    var isCheckUpNecessary: Boolean = true,
 )

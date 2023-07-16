@@ -29,14 +29,15 @@ class CheckUpController(private val checkUppService: CheckUpService) {
     @ExceptionHandler(value = [(CarNotFoundException::class)])
     fun handleException(ex: CarNotFoundException): ResponseEntity<String> {
         println(ex.message)
-        return ResponseEntity("Error occurred: ${ex.message}", HttpStatus.BAD_REQUEST)
+        return ResponseEntity("Error occurred: ${ex.message}", HttpStatus.NOT_FOUND)
     }
 
-    @GetMapping("/car-details")
+    @GetMapping("/car-details/{vin}")
     @ResponseBody
-    fun getCarDetails(@RequestParam vin: String): ResponseEntity<List<CarCheckUp>> {
-        val listOfCheckUps = checkUppService.getCheckUps(vin.removeSurrounding("\""))
-        return ResponseEntity(listOfCheckUps, HttpStatus.OK)
+    fun getCarDetails(@PathVariable vin: String): ResponseEntity<Car> {
+        println(vin)
+        val car = checkUppService.getCheckUps(vin.removeSurrounding("\""))
+        return ResponseEntity(car, HttpStatus.OK)
     }
 
     @GetMapping("/manufacturers-details")

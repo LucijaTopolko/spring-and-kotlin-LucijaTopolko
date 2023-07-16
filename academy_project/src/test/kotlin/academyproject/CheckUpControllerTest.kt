@@ -1,5 +1,5 @@
 package academyproject
-import academyproject.entities.CarCheckUp
+import academyproject.entities.Car
 import academyproject.service.CheckUpService
 import io.mockk.every
 import io.mockk.mockk
@@ -11,6 +11,8 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.HttpStatus
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.get
+import java.time.LocalDate
+import java.time.Year
 
 @WebMvcTest
 class CheckUpControllerTest {
@@ -20,22 +22,22 @@ class CheckUpControllerTest {
     @MockBean
     private lateinit var checkUpService: CheckUpService
 
-    private val checkUps: List<CarCheckUp> = listOf()
+    private val car = Car(1, LocalDate.now(), "BMW", "X6", Year.of(2020), "HR123456789")
     private val manufacturers: MutableMap<String, Int> = mutableMapOf<String, Int>()
 
     @BeforeEach
     fun setUp() {
         checkUpService = mockk()
-        every { checkUpService.getCheckUps("HR123456789") } answers { checkUps }
+        every { checkUpService.getCheckUps("HR123456789") } answers { car }
         every { checkUpService.getManufacturers() } answers { manufacturers }
     }
 
     @Test
     fun getCarDetails() {
-        mockMvc.get("/car-details?vin=HR123456789")
+        mockMvc.get("/car-details/HR123456789")
             .andExpect {
                 status { is2xxSuccessful() }
-                content { checkUps }
+                content { car }
             }
     }
 
@@ -52,7 +54,7 @@ class CheckUpControllerTest {
     fun getCarDetailsException() {
         mockMvc.get("/car-details?vin=HR123456788")
             .andExpect {
-                status { HttpStatus.BAD_REQUEST }
+                status { HttpStatus.NOT_FOUND }
                 content { "Error occurred: Car not found" }
             }
     }
