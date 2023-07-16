@@ -52,7 +52,7 @@ class CheckUpControllerTest {
 
     @Test
     fun getCarDetailsException() {
-        mockMvc.get("/car-details?vin=HR123456788")
+        mockMvc.get("/car-details/HR123456788")
             .andExpect {
                 status { HttpStatus.NOT_FOUND }
                 content { "Error occurred: Car not found" }
