@@ -1,61 +1,55 @@
 package academyproject
-import academyproject.entities.Car
-import academyproject.service.CheckUpService
-import io.mockk.every
-import io.mockk.mockk
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.http.HttpStatus
-import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.get
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
+import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
+import org.springframework.test.annotation.Commit
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.Year
 
-@WebMvcTest
+@JdbcTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Commit
 class CheckUpControllerTest {
+
     @Autowired
-    private lateinit var mockMvc: MockMvc
-
-    @MockBean
-    private lateinit var checkUpService: CheckUpService
-
-    private val car = Car(1, LocalDate.now(), "BMW", "X6", Year.of(2020), "HR123456789")
-    private val manufacturers: MutableMap<String, Int> = mutableMapOf<String, Int>()
+    lateinit var template: NamedParameterJdbcTemplate
 
     @BeforeEach
     fun setUp() {
-        checkUpService = mockk()
-        every { checkUpService.getCheckUps("HR123456789") } answers { car }
-        every { checkUpService.getManufacturers() } answers { manufacturers }
+        template.update(
+            "INSERT INTO cars (date, manufacturer, model, year, vin) VALUES (:date, :manufacturer, :model, :year, :vin)",
+            mapOf("date" to LocalDate.now(), "manufacturer" to "BMW", "model" to "X6", "year" to Year.of(2020).value, "vin" to "HR123456789"),
+        )
+        template.update(
+            "INSERT INTO carCheckUps (dateTime, worker, price, carId) VALUES (:dateTime, :worker, :price, :carId)",
+            mapOf("dateTime" to LocalDateTime.now(), "worker" to "John", "price" to 150, "carId" to 1),
+        )
     }
 
     @Test
-    fun getCarDetails() {
-        mockMvc.get("/car-details/HR123456789")
-            .andExpect {
-                status { is2xxSuccessful() }
-                content { car }
-            }
+    fun addingCars() {
+        Assertions.assertThat(
+            template.queryForObject(
+                "SELECT model FROM cars WHERE carId=:carId",
+                mapOf("carId" to 1),
+                String::class.java,
+            ),
+        ).isEqualTo("X6")
     }
 
     @Test
-    fun getManufacturerDetails() {
-        mockMvc.get("/manufacturers-details")
-            .andExpect {
-                status { is2xxSuccessful() }
-                content { manufacturers }
-            }
-    }
-
-    @Test
-    fun getCarDetailsException() {
-        mockMvc.get("/car-details/HR123456788")
-            .andExpect {
-                status { HttpStatus.NOT_FOUND }
-                content { "Error occurred: Car not found" }
-            }
+    fun addingCheckUps() {
+        Assertions.assertThat(
+            template.queryForObject(
+                "SELECT price FROM carCheckUps WHERE worker = :worker ORDER BY dateTime DESC LIMIT 1",
+                mapOf("worker" to "John"),
+                Int::class.java,
+            ),
+        ).isEqualTo(150)
     }
 }
