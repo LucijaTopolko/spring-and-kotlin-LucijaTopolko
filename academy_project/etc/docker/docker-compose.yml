@@ -1,7 +1,5 @@
 version: "3"
 
-# docker run --rm --name courses-database -v courses-data:/var/lib/postgresql/data -p 5432:5432
-# -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=courses-db -d postgres:13-alpine
 services:
   checkups-database:
     image: "postgres:13-alpine"
@@ -15,3 +13,7 @@ services:
       - "POSTGRES_DB=checkups-db"
 volumes:
   checkups-data:
+
+#naredba:
+# docker run --name checkups-database -e POSTGRES_PASSWORD=admin -e POSTGRES_USER=admin -e POSTGRES_DB=checkups-db -p 5432:5432 -v checkups-data:/var/lib/postgresql/data postgres
+# psql -h localhost -p 5432 -d checkups-data -U admin
