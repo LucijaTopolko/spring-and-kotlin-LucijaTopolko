@@ -16,4 +16,3 @@ volumes:
 
 #naredba:
 # docker run --name checkups-database -e POSTGRES_PASSWORD=admin -e POSTGRES_USER=admin -e POSTGRES_DB=checkups-db -p 5432:5432 -v checkups-data:/var/lib/postgresql/data postgres
-# psql -h localhost -p 5432 -d checkups-data -U admin
