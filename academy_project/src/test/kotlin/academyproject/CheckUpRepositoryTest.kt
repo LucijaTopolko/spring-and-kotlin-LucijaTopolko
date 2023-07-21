@@ -14,7 +14,7 @@ import java.time.Year
 @JdbcTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Commit
-class CheckUpControllerTest {
+class CheckUpRepositoryTest {
 
     @Autowired
     lateinit var template: NamedParameterJdbcTemplate

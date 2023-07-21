@@ -1,6 +1,5 @@
 package academyproject.repository
 
-import academyproject.entities.Car
 import academyproject.entities.CarCheckUp
 import academyproject.entities.CarNotFoundException
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
@@ -9,13 +8,6 @@ import java.time.LocalDateTime
 
 @Repository
 class CheckUpRepository(private val template: NamedParameterJdbcTemplate) {
-
-    fun insertCar(car: Car) {
-        template.update(
-            "INSERT INTO cars (date, manufacturer, model, year, vin) VALUES (:date, :manufacturer, :model, :year, :vin)",
-            mapOf("date" to car.date, "manufacturer" to car.manufacturer, "model" to car.model, "year" to car.year.value, "vin" to car.vin),
-        )
-    }
 
     fun insertCheckUp(checkUp: CarCheckUp) {
         val isCheckUpNecessary = template.queryForObject(
@@ -45,5 +37,13 @@ class CheckUpRepository(private val template: NamedParameterJdbcTemplate) {
                 mapOf("needed" to needed, "carId" to carId),
             )
         }
+    }
+
+    fun getManufacturerDetails(): Map<String, Int> {
+        val details = template.queryForList(
+            "SELECT DISTINCT cars.manufacturer, (SELECT COUNT(*) FROM carCheckUps WHERE carId = cars.carId) AS count FROM cars",
+            emptyMap<String, Any>(),
+        )
+        return details.associate { it["manufacturer"] as String to (it["count"] as Number).toInt() }
     }
 }
