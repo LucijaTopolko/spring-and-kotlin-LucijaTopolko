@@ -1,5 +1,5 @@
 CREATE TABLE cars(
-    carId BIGSERIAL PRIMARY KEY,
+    carId UUID PRIMARY KEY,
     date DATE NOT NULL,
     manufacturer VARCHAR(30) NOT NULL,
     model VARCHAR(30) NOT NULL,
@@ -9,10 +9,10 @@ CREATE TABLE cars(
 );
 
 CREATE TABLE carCheckUps(
-    id BIGSERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     dateTime TIMESTAMP NOT NULL,
     worker VARCHAR(30) NOT NULL,
     price INT NOT NULL,
-    carId INT NOT NULL,
+    carId UUID NOT NULL,
     FOREIGN KEY (carId) REFERENCES cars(carId)
 );
