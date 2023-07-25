@@ -1,6 +1,5 @@
 package academyproject.checkup.controller
 
-import academyproject.car.repository.CarRepository
 import academyproject.checkup.controller.dto.AddCheckUpDTO
 import academyproject.checkup.controller.dto.CheckUpFilter
 import academyproject.checkup.entity.CarCheckUp
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.* // ktlint-disable no-wildcard-i
 @Controller
 class CheckUpController(
     private val checkUpService: CheckUpService,
-    private val carRepository: CarRepository,
 ) {
     @GetMapping("/paged")
     private fun getAllCars(@RequestBody car: CheckUpFilter, pageable: Pageable): ResponseEntity<Page<CarCheckUp>> {
@@ -39,5 +37,3 @@ class CheckUpController(
     fun getManufacturerDetails() =
         ResponseEntity.ok(checkUpService.manufacturerDetails())
 }
-// e73c6c80-61b9-44e8-bffd-c1d24dbb6204
-// c510469c-ebef-4f08-8bac-367c9633ef34
