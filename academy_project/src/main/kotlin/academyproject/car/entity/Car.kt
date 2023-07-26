@@ -13,8 +13,11 @@ data class Car(
     var carid: UUID = UUID.randomUUID(),
 
     val date: LocalDate,
-    val manufacturer: String,
-    val model: String,
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "modelid")
+    val model: Model,
+
     var year: Int,
     val vin: String,
 )

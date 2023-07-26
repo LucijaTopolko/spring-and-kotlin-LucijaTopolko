@@ -4,7 +4,6 @@ import academyproject.checkup.controller.dto.AddCheckUpDTO
 import academyproject.checkup.controller.dto.CheckUpFilter
 import academyproject.checkup.entity.CarCheckUp
 import academyproject.checkup.service.CheckUpService
-import academyproject.exception.entity.CarNotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
@@ -27,8 +26,8 @@ class CheckUpController(
     fun createCar(@RequestBody checkUp: AddCheckUpDTO) =
         ResponseEntity.ok(checkUpService.addCheckUp(checkUp))
 
-    @ExceptionHandler(value = [(CarNotFoundException::class)])
-    fun handleException(ex: CarNotFoundException): ResponseEntity<String> {
+    @ExceptionHandler(value = [(RuntimeException::class)])
+    fun handleException(ex: RuntimeException): ResponseEntity<String> {
         return ResponseEntity("Error occurred: ${ex.message}", HttpStatus.NOT_FOUND)
     }
 

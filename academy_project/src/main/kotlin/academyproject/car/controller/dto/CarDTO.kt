@@ -15,8 +15,8 @@ data class CarDTO(
     constructor(car: Car) : this(
         car.carid,
         car.date,
-        car.manufacturer,
-        car.model,
+        car.model.manufacturer,
+        car.model.model,
         car.year,
         car.vin,
     )

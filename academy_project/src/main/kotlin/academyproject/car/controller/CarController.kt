@@ -3,9 +3,11 @@ package academyproject.car.controller
 import academyproject.car.controller.dto.AddCarDTO
 import academyproject.car.service.CarService
 import org.springframework.data.domain.Pageable
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.* // ktlint-disable no-wildcard-imports
+import java.util.*
 
 @RequestMapping("/car")
 @Controller
@@ -20,8 +22,13 @@ class CarController(private val carService: CarService) {
     fun createCar(@RequestBody car: AddCarDTO) =
         ResponseEntity.ok(carService.addCar(car))
 
-    @GetMapping("/{vin}")
+    @GetMapping("/{id}")
     @ResponseBody
-    fun getCarDetails(@PathVariable vin: String) =
-        ResponseEntity.ok(carService.getDetails(vin))
+    fun getCarDetails(@PathVariable id: UUID) =
+        ResponseEntity.ok(carService.getDetails(id))
+
+    @ExceptionHandler(value = [(RuntimeException::class)])
+    fun handleException(ex: RuntimeException): ResponseEntity<String> {
+        return ResponseEntity("Error occurred: ${ex.message}", HttpStatus.NOT_FOUND)
+    }
 }
