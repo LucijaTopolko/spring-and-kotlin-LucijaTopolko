@@ -1,55 +1,83 @@
 package academyproject
-import org.assertj.core.api.Assertions
+
+import academyproject.car.entity.Car
+import academyproject.car.repository.CarRepository
+import academyproject.checkup.controller.dto.CheckUpFilter
+import academyproject.checkup.repository.CheckUpRepository
+import academyproject.checkup.repository.CheckUpSpecifications
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
-import org.springframework.test.annotation.Commit
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.data.domain.PageRequest
 import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.Year
 
-@JdbcTest
+@DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@Commit
-class CheckUpRepositoryTest {
-
-    @Autowired
-    lateinit var template: NamedParameterJdbcTemplate
+class CheckUpRepositoryTest @Autowired constructor(
+    val carRepository: CarRepository,
+    val checkUpRepository: CheckUpRepository,
+) {
 
     @BeforeEach
-    fun setUp() {
-        template.update(
-            "INSERT INTO cars (date, manufacturer, model, year, vin) VALUES (:date, :manufacturer, :model, :year, :vin)",
-            mapOf("date" to LocalDate.now(), "manufacturer" to "BMW", "model" to "X6", "year" to Year.of(2020).value, "vin" to "HR123456789"),
+    fun setup() {
+        carRepository.deleteAll()
+        checkUpRepository.deleteAll()
+
+        var car1 = Car(
+            date = LocalDate.now(),
+            manufacturer = "BMW",
+            model = "X6",
+            vin = "HRabc",
+            year = 2023,
         )
-        template.update(
-            "INSERT INTO carCheckUps (dateTime, worker, price, carId) VALUES (:dateTime, :worker, :price, :carId)",
-            mapOf("dateTime" to LocalDateTime.now(), "worker" to "John", "price" to 150, "carId" to 1),
+        var car2 = Car(
+            date = LocalDate.now(),
+            manufacturer = "Porsche",
+            model = "Panamera",
+            vin = "HRasdf",
+            year = 2021,
         )
+        var car3 = Car(
+            date = LocalDate.now(),
+            manufacturer = "BMW",
+            model = "X3",
+            vin = "HRtzu",
+            year = 2016,
+        )
+        carRepository.save(car1)
+        carRepository.save(car2)
+        carRepository.save(car3)
     }
 
     @Test
-    fun addingCars() {
-        Assertions.assertThat(
-            template.queryForObject(
-                "SELECT model FROM cars WHERE carId=:carId",
-                mapOf("carId" to 1),
-                String::class.java,
-            ),
-        ).isEqualTo("X6")
+    fun findAllCars() {
+        val pageable = PageRequest.of(0, 2)
+        val all = carRepository.findAll(pageable)
+        assertThat(all.totalPages).isEqualTo(2)
     }
 
     @Test
-    fun addingCheckUps() {
-        Assertions.assertThat(
-            template.queryForObject(
-                "SELECT price FROM carCheckUps WHERE worker = :worker ORDER BY dateTime DESC LIMIT 1",
-                mapOf("worker" to "John"),
-                Int::class.java,
-            ),
-        ).isEqualTo(150)
+    fun findAllCheckUps() {
+        val car1 = Car(
+            date = LocalDate.now(),
+            manufacturer = "BMW",
+            model = "X6",
+            vin = "HR123",
+            year = 2023,
+        )
+        val pageable = PageRequest.of(0, 2)
+        val filter = CheckUpFilter(car = car1)
+        val spec = CheckUpSpecifications.toSpecification(filter)
+        val all = checkUpRepository.findAll(spec, pageable)
+        assertThat(all.totalElements).isEqualTo(0)
+    }
+
+    @Test
+    fun getCarDetails() {
+        val details = carRepository.findByVin("HRabc")
+        assertThat(details?.manufacturer).isEqualTo("BMW")
     }
 }

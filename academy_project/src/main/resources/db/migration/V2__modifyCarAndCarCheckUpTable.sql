@@ -1,0 +1,25 @@
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+ALTER TABLE cars ADD COLUMN newCarId UUID;
+ALTER TABLE carCheckUps ADD COLUMN newId UUID;
+ALTER TABLE carCheckUps ADD COLUMN newFk UUID;
+
+UPDATE cars SET newCarId = uuid_generate_v4();
+UPDATE carCheckUps SET newId = uuid_generate_v4();
+
+ALTER TABLE carCheckUps DROP CONSTRAINT fk_cars;
+ALTER TABLE cars DROP CONSTRAINT pk_cars;
+ALTER TABLE carCheckUps DROP CONSTRAINT pk_carCheckUps;
+
+ALTER TABLE cars DROP COLUMN carId;
+ALTER TABLE carCheckUps DROP COLUMN id;
+ALTER TABLE carCheckUps DROP COLUMN carId;
+
+ALTER TABLE cars RENAME COLUMN newCarId TO carId;
+ALTER TABLE carCheckUps RENAME COLUMN newId TO id;
+ALTER TABLE carCheckUps RENAME COLUMN newFk TO carId;
+
+ALTER TABLE cars ADD CONSTRAINT pk_cars PRIMARY KEY(carId);
+ALTER TABLE carCheckUps ADD CONSTRAINT pk_carCheckUps PRIMARY KEY(id);
+ALTER TABLE carCheckUps ADD CONSTRAINT fk_cars FOREIGN KEY(carId) REFERENCES cars(carId);
+
