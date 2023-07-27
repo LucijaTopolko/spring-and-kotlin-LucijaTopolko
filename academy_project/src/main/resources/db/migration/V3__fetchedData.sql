@@ -11,6 +11,9 @@ UPDATE cars SET modelid = (
     SELECT carinfo.modelid FROM carinfo WHERE manufacturer = cars.manufacturer AND model = cars.model
 );
 
+ALTER TABLE carCheckUps DROP CONSTRAINT fk_cars;
+ALTER TABLE carCheckUps ADD CONSTRAINT fk_cars FOREIGN KEY(carId) REFERENCES cars(carId) ON DELETE CASCADE;
+
 DELETE FROM cars WHERE modelid IS NULL;
 
 ALTER TABLE cars ADD CONSTRAINT fk_carinfo FOREIGN KEY(modelid) REFERENCES carinfo(modelid);

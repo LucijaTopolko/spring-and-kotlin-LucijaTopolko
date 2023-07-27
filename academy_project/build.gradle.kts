@@ -37,7 +37,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springframework.boot:spring-boot-starter-cache")
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.5")
-    implementation("org.springframework.boot:spring-boot-starter-data-redis")
 
     runtimeOnly("org.postgresql:postgresql")
 

@@ -1,6 +1,5 @@
 package academyproject
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Test
 import org.mockserver.client.MockServerClient
 import org.mockserver.model.HttpRequest
@@ -17,7 +16,6 @@ import org.springframework.test.web.servlet.get
 @AutoConfigureMockMvc
 class CheckUpRepositoryTest @Autowired constructor(
     private val mockMvc: MockMvc,
-    private val objectMapper: ObjectMapper,
 ) {
 
     lateinit var mockServerClient: MockServerClient
