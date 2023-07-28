@@ -1,38 +1,37 @@
 package academyproject.checkup.controller
 
 import academyproject.checkup.controller.dto.AddCheckUpDTO
-import academyproject.checkup.controller.dto.CheckUpFilter
-import academyproject.checkup.entity.CarCheckUp
 import academyproject.checkup.service.CheckUpService
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.* // ktlint-disable no-wildcard-imports
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 
-@RequestMapping("/checkup")
+@RequestMapping("/api/v1/checkup")
 @Controller
 class CheckUpController(
     private val checkUpService: CheckUpService,
 ) {
-    @GetMapping("/paged")
-    private fun getAllCars(@RequestBody car: CheckUpFilter, pageable: Pageable): ResponseEntity<Page<CarCheckUp>> {
-        return ResponseEntity.ok(checkUpService.getAll(car, pageable))
-    }
 
     @PostMapping
     @ResponseBody
-    fun createCar(@RequestBody checkUp: AddCheckUpDTO) =
-        ResponseEntity.ok(checkUpService.addCheckUp(checkUp))
-
-    @ExceptionHandler(value = [(RuntimeException::class)])
-    fun handleException(ex: RuntimeException): ResponseEntity<String> {
-        return ResponseEntity("Error occurred: ${ex.message}", HttpStatus.NOT_FOUND)
+    fun createCar(@RequestBody checkUp: AddCheckUpDTO): ResponseEntity<Unit> {
+        checkUpService.addCheckUp(checkUp)
+        val location = ServletUriComponentsBuilder.fromCurrentContextPath()
+            .path("/api/v1/car/{id}/checkup")
+            .buildAndExpand(mapOf("id" to checkUp.carid))
+            .toUri()
+        return ResponseEntity.created(location).build()
     }
 
     @GetMapping("/manufacturers-details")
     @ResponseBody
     fun getManufacturerDetails() =
         ResponseEntity.ok(checkUpService.manufacturerDetails())
+
+    @ExceptionHandler(value = [(RuntimeException::class)])
+    fun handleException(ex: RuntimeException): ResponseEntity<String> {
+        return ResponseEntity("Error occurred: ${ex.message}", HttpStatus.NOT_FOUND)
+    }
 }

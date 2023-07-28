@@ -2,40 +2,37 @@ package academyproject.car.service
 
 import academyproject.car.controller.dto.AddCarDTO
 import academyproject.car.controller.dto.CarDTO
-import academyproject.car.controller.dto.CarPrintDTO
+import academyproject.car.entity.Car
 import academyproject.car.repository.CarRepository
 import academyproject.car.repository.ModelRepository
-import academyproject.checkup.repository.CheckUpRepository
 import academyproject.exception.entity.CarNotFoundException
-import org.springframework.data.domain.Page
+import academyproject.exception.entity.WrongModelException
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 import java.util.*
 
 @Service
 class CarService(
     private val carRepository: CarRepository,
-    private val checkUpRepository: CheckUpRepository,
     private val modelRepository: ModelRepository,
 ) {
 
-    fun addCar(car: AddCarDTO) {
-        CarDTO(
+    fun addCar(car: AddCarDTO): CarDTO {
+        if (!modelRepository.existsByManufacturerAndModel(car.manufacturer, car.model)) {
+            throw WrongModelException()
+        }
+        return CarDTO.fromEntity(
             carRepository.save(
-                car.car(modelRepository),
+                Car(
+                    date = car.date,
+                    year = car.year,
+                    model = modelRepository.findByManufacturerAndModel(car.manufacturer, car.model),
+                    vin = car.vin,
+                ),
             ),
         )
     }
 
-    fun getDetails(id: UUID): CarPrintDTO {
-        return carRepository.findById(id)?.let {
-            val checkUps = checkUpRepository.findByCarOrderByDateTimeDesc(it)
-            val needed: Boolean = checkUps.firstOrNull()?.dateTime == null || checkUps.first().dateTime.isBefore(LocalDateTime.now().minusYears(1))
-            CarPrintDTO(it, checkUps, needed)
-        } ?: throw CarNotFoundException()
-    }
-
-    fun getAll(pageable: Pageable): Page<CarDTO> =
-        carRepository.findAll(pageable).map { CarDTO(it) }
+    fun getDetails(id: UUID): Car = carRepository.findById(id) ?: throw CarNotFoundException()
+    fun getAll(pageable: Pageable) = carRepository.findAll(pageable)
 }

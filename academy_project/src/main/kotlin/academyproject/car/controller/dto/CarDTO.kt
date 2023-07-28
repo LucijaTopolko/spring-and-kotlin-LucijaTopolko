@@ -12,12 +12,15 @@ data class CarDTO(
     var year: Int,
     val vin: String,
 ) {
-    constructor(car: Car) : this(
-        car.carid,
-        car.date,
-        car.model.manufacturer,
-        car.model.model,
-        car.year,
-        car.vin,
-    )
+
+    companion object {
+        fun fromEntity(car: Car) = CarDTO(
+            carid = car.carid,
+            date = car.date,
+            manufacturer = car.model.manufacturer,
+            model = car.model.model,
+            year = car.year,
+            vin = car.vin,
+        )
+    }
 }
