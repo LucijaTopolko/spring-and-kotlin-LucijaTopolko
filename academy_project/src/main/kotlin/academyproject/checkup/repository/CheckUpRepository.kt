@@ -12,7 +12,7 @@ import java.util.*
 interface CheckUpRepository : JpaRepository<CarCheckUp, UUID>, JpaSpecificationExecutor<CarCheckUp> {
     fun save(checkUp: AddCheckUpDTO): CarCheckUp
 
-    @Query("SELECT c.manufacturer AS manufacturer, COUNT(cu) AS count FROM CarCheckUp cu JOIN cu.car c GROUP BY c.manufacturer")
+    @Query("SELECT m.manufacturer AS manufacturer, COUNT(cu) AS count FROM CarCheckUp cu JOIN cu.car c JOIN c.model m GROUP BY m.manufacturer")
     fun countByManufacturer(): List<Projection>
 
     fun findByCarOrderByDateTimeDesc(car: Car): List<CarCheckUp>

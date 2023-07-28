@@ -16,8 +16,8 @@ class CarPrintDTO(
 ) {
     constructor(car: Car, checkUps: List<CarCheckUp>, ischeckupnecessary: Boolean) : this(
         car.date,
-        car.manufacturer,
-        car.model,
+        car.model.manufacturer,
+        car.model.model,
         car.year,
         car.vin,
         checkUps.map { CheckUpDTO(it) },

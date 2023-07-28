@@ -3,7 +3,7 @@ package academyproject.checkup.entity
 import academyproject.car.entity.Car
 import java.time.LocalDateTime
 import java.util.*
-import javax.persistence.*
+import javax.persistence.* // ktlint-disable no-wildcard-imports
 
 @Entity
 @Table(name = "carcheckups")
