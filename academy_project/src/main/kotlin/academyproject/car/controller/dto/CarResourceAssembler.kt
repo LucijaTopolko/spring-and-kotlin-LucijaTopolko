@@ -29,10 +29,7 @@ class CarResourceAssembler : RepresentationModelAssemblerSupport<Car, CarResourc
         createModelWithId(entity.carid, entity).apply {
             add(
                 linkTo<CarCheckUpController> {
-                    getCheckUps(sort = "desc", id = entity.carid, pageable = noPagination, pagedResourcesAssembler = nullAssembler)
-                }.withRel("checkup"),
-                linkTo<CarCheckUpController> {
-                    getCheckUps(sort = "asc", id = entity.carid, pageable = noPagination, pagedResourcesAssembler = nullAssembler)
+                    getCheckUps(sort = null, id = entity.carid, pageable = noPagination, pagedResourcesAssembler = nullAssembler)
                 }.withRel("checkup"),
             )
         }

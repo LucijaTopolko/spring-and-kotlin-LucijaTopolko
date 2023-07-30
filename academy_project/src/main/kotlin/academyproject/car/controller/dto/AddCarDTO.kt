@@ -3,7 +3,6 @@ package academyproject.car.controller.dto
 import academyproject.car.entity.Car
 import academyproject.car.repository.ModelRepository
 import academyproject.exception.entity.WrongModelException
-import org.springframework.cache.annotation.Cacheable
 import java.time.LocalDate
 import java.util.*
 

@@ -25,7 +25,7 @@ class CheckUpRepositoryTest @Autowired constructor(
         mockServerClient.`when`(
             HttpRequest.request()
                 .withMethod("GET")
-                .withPath("/checkup/manufacturers-details"),
+                .withPath("/api/v1/checkup/manufacturers-details"),
         ).respond(
             HttpResponse()
                 .withStatusCode(200)
@@ -37,7 +37,7 @@ class CheckUpRepositoryTest @Autowired constructor(
                     """.trimIndent(),
                 ),
         )
-        mockMvc.get("/checkup/manufacturers-details")
+        mockMvc.get("/api/v1/checkup/manufacturers-details")
             .andExpect {
                 status { isOk() }
                 content {

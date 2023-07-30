@@ -26,7 +26,7 @@ class CarCheckUpController(
     @ResponseBody
     fun getCheckUps(
         @PathVariable id: UUID,
-        @RequestParam(required = false, defaultValue = "desc") sort: String,
+        @RequestParam(required = false, defaultValue = "desc") sort: String?,
         pageable: Pageable,
         pagedResourcesAssembler: PagedResourcesAssembler<CarCheckUp>,
     ): ResponseEntity<PagedModel<CheckUpResource>> =
