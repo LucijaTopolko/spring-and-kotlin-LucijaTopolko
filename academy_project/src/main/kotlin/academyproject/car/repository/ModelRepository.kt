@@ -8,7 +8,7 @@ import java.util.UUID
 interface ModelRepository : Repository<Model, UUID> {
 
     @Cacheable(value = ["model"], key = "{#manufacturer, #model}")
-    fun findByManufacturerAndModel(manufacturer: String, model: String): Model?
+    fun findByManufacturerAndModel(manufacturer: String, model: String): Model
 
     fun save(carDb: Model): Model
 

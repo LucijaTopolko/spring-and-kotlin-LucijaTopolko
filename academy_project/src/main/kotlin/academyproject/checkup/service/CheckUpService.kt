@@ -3,14 +3,13 @@ package academyproject.checkup.service
 import academyproject.car.repository.CarRepository
 import academyproject.checkup.controller.dto.AddCheckUpDTO
 import academyproject.checkup.controller.dto.CheckUpDTO
-import academyproject.checkup.controller.dto.CheckUpFilter
 import academyproject.checkup.entity.CarCheckUp
 import academyproject.checkup.repository.CheckUpRepository
-import academyproject.checkup.repository.CheckUpSpecifications
 import academyproject.exception.entity.CarNotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
 class CheckUpService(
@@ -39,8 +38,12 @@ class CheckUpService(
         return map
     }
 
-    fun getAll(filter: CheckUpFilter, pageable: Pageable): Page<CarCheckUp> {
-        val spec = CheckUpSpecifications.toSpecification(filter)
-        return checkUpRepository.findAll(spec, pageable)
+    fun getAll(sort: String?, carId: UUID, pageable: Pageable): Page<CarCheckUp> {
+        val car = carRepository.findById(carId) ?: throw CarNotFoundException()
+        return if (sort == "desc") {
+            checkUpRepository.findByCarOrderByDateTimeDesc(car, pageable)
+        } else {
+            checkUpRepository.findByCarOrderByDateTimeAsc(car, pageable)
+        }
     }
 }
