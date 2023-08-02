@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.* // ktlint-disable no-wildcard-imports
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import java.util.*
 
 @RequestMapping("/api/v1/checkup")
 @Controller
@@ -29,6 +30,10 @@ class CheckUpController(
     @ResponseBody
     fun getManufacturerDetails() =
         ResponseEntity.ok(checkUpService.manufacturerDetails())
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
+    fun delete(@PathVariable id: UUID) = ResponseEntity.ok(checkUpService.deleteCheckUp(id))
 
     @ExceptionHandler(value = [(RuntimeException::class)])
     fun handleException(ex: RuntimeException): ResponseEntity<String> {

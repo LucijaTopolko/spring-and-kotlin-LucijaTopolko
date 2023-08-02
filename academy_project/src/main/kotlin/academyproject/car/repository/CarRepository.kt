@@ -9,6 +9,9 @@ import java.util.*
 interface CarRepository : Repository<Car, UUID> {
     fun save(car: Car): Car
     fun findAll(pageable: Pageable): Page<Car>
-    fun deleteAll()
     fun findById(carId: UUID): Car?
+    fun existsById(carId: UUID): Boolean
+    fun deleteById(carId: UUID): Car?
+    fun findByVin(vin: String): Car?
+    fun deleteAll()
 }

@@ -35,4 +35,9 @@ class CarService(
 
     fun getDetails(id: UUID): Car = carRepository.findById(id) ?: throw CarNotFoundException()
     fun getAll(pageable: Pageable) = carRepository.findAll(pageable)
+
+    fun delete(id: UUID) {
+        if (!carRepository.existsById(id)) throw CarNotFoundException()
+        carRepository.deleteById(id)
+    }
 }

@@ -43,15 +43,24 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-ui:1.6.9")
     implementation("org.springdoc:springdoc-openapi-hateoas:1.6.9")
 
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation("org.springframework.boot:spring-boot-starter-security")
+
+    implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation("io.projectreactor.netty:reactor-netty")
+
     runtimeOnly("org.postgresql:postgresql")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mock-server:mockserver-spring-test-listener:5.11.2")
+    testImplementation("org.springframework.security:spring-security-test")
 
     testImplementation("com.ninja-squad:springmockk:4.0.2")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
 }
+
 
 dependencyManagement {
     imports {

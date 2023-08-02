@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.* // ktlint-disable no-wildcard-imports
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
+import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 @RequestMapping("/api/v1/car")
@@ -48,6 +50,10 @@ class CarController(
     fun getCarDetails(@PathVariable id: UUID): ResponseEntity<CarResource> {
         return ResponseEntity.ok(resourceAssembler.toModel(carService.getDetails(id)))
     }
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
+    fun deleteCar(@PathVariable id: UUID) = ResponseEntity.ok(carService.delete(id))
 
     @ExceptionHandler(value = [(RuntimeException::class)])
     fun handleException(ex: RuntimeException): ResponseEntity<String> {

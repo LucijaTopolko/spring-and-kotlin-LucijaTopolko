@@ -6,6 +6,7 @@ import academyproject.checkup.controller.dto.CheckUpDTO
 import academyproject.checkup.entity.CarCheckUp
 import academyproject.checkup.repository.CheckUpRepository
 import academyproject.exception.entity.CarNotFoundException
+import academyproject.exception.entity.CheckUpNotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -46,4 +47,10 @@ class CheckUpService(
             checkUpRepository.findByCarOrderByDateTimeAsc(car, pageable)
         }
     }
+
+    fun deleteCheckUp(id: UUID) {
+        if (!checkUpRepository.existsById(id)) throw CheckUpNotFoundException()
+        checkUpRepository.deleteById(id)
+    }
+
 }
