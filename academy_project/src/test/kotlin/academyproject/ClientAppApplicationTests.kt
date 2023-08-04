@@ -12,6 +12,8 @@ import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.security.test.context.support.WithMockUser
+import org.springframework.security.test.context.support.WithSecurityContext
 import org.springframework.security.test.context.support.WithUserDetails
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.delete
@@ -50,7 +52,7 @@ class ClientAppApplicationTests @Autowired constructor(
     fun contextLoads() {}
 
     @Test
-    @WithUserDetails("admin")
+    @WithMockUser(username = "admin", roles = ["ADMIN"])
     fun `admin can access all cars`() {
         mockMvc.get("/api/v1/car/paged")
             .andExpect {
@@ -60,7 +62,7 @@ class ClientAppApplicationTests @Autowired constructor(
     }
 
     @Test
-    @WithUserDetails("user")
+    @WithMockUser(username = "user", roles = ["USER"])
     fun `user can not access all cars`() {
         mockMvc.get("/api/v1/car/paged")
             .andExpect {
@@ -70,7 +72,7 @@ class ClientAppApplicationTests @Autowired constructor(
     }
 
     @Test
-    @WithUserDetails("admin")
+    @WithMockUser(username = "admin", roles = ["ADMIN"])
     fun `admin can see car details`() {
         mockMvc.get("/api/v1/car/$carId")
             .andExpect {
@@ -80,7 +82,7 @@ class ClientAppApplicationTests @Autowired constructor(
     }
 
     @Test
-    @WithUserDetails("user")
+    @WithMockUser(username = "user", roles = ["USER"])
     fun `user can see car details`() {
         mockMvc.get("/api/v1/car/$carId")
             .andExpect {
@@ -90,7 +92,7 @@ class ClientAppApplicationTests @Autowired constructor(
     }
 
     @Test
-    @WithUserDetails("admin")
+    @WithMockUser(username = "admin", roles = ["ADMIN"])
     fun `admin can see manufacturer details`() {
         mockMvc.get("/api/v1/checkup/manufacturers-details")
             .andExpect {
@@ -100,7 +102,7 @@ class ClientAppApplicationTests @Autowired constructor(
     }
 
     @Test
-    @WithUserDetails("user")
+    @WithMockUser(username = "user", roles = ["USER"])
     fun `user can see manufacturer details`() {
         mockMvc.get("/api/v1/checkup/manufacturers-details")
             .andExpect {
@@ -110,7 +112,7 @@ class ClientAppApplicationTests @Autowired constructor(
     }
 
     @Test
-    @WithUserDetails("user")
+    @WithMockUser(username = "user", roles = ["USER"])
     fun `user can't create checkup`() {
         mockMvc.post("/api/v1/checkup")
             .andExpect {
@@ -120,7 +122,7 @@ class ClientAppApplicationTests @Autowired constructor(
     }
 
     @Test
-    @WithUserDetails("user")
+    @WithMockUser(username = "user", roles = ["USER"])
     fun `user can't delete checkup`() {
         mockMvc.delete("/api/v1/checkup/delete/$id")
             .andExpect {
@@ -130,7 +132,7 @@ class ClientAppApplicationTests @Autowired constructor(
     }
 
     @Test
-    @WithUserDetails("admin")
+    @WithMockUser(username = "admin", roles = ["ADMIN"])
     fun `admin can delete checkup`() {
         mockMvc.delete("/api/v1/checkup/delete/$id")
             .andExpect {
@@ -140,7 +142,7 @@ class ClientAppApplicationTests @Autowired constructor(
     }
 
     @Test
-    @WithUserDetails("user")
+    @WithMockUser(username = "user", roles = ["USER"])
     fun `user can't delete car`() {
         mockMvc.delete("/api/v1/car/delete/$carId")
             .andExpect {
@@ -150,7 +152,7 @@ class ClientAppApplicationTests @Autowired constructor(
     }
 
     @Test
-    @WithUserDetails("admin")
+    @WithMockUser(username = "admin", roles = ["ADMIN"])
     fun `admin can delete car`() {
         mockMvc.delete("/api/v1/car/delete/$carId")
             .andExpect {
