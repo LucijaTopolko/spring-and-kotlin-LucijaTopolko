@@ -10,7 +10,7 @@ data class CarDTO(
     val manufacturer: String,
     val model: String,
     var year: Int,
-    val vin: String,
+    val vin: String
 ) {
 
     companion object {
@@ -20,7 +20,7 @@ data class CarDTO(
             manufacturer = car.model.manufacturer,
             model = car.model.model,
             year = car.year,
-            vin = car.vin,
+            vin = car.vin
         )
     }
 }

@@ -16,7 +16,7 @@ import java.util.*
 @Component
 class CheckUpResourceAssembler : RepresentationModelAssemblerSupport<CarCheckUp, CheckUpResource>(
     CheckUpController::class.java,
-    CheckUpResource::class.java,
+    CheckUpResource::class.java
 ) {
     override fun toModel(entity: CarCheckUp): CheckUpResource =
         CheckUpResource(
@@ -24,12 +24,12 @@ class CheckUpResourceAssembler : RepresentationModelAssemblerSupport<CarCheckUp,
             dateTime = entity.dateTime,
             worker = entity.worker,
             price = entity.price,
-            car = entity.car,
+            car = entity.car
         ).apply {
             add(
                 linkTo<CarController> {
                     getCarDetails(entity.id)
-                }.withRel("car"),
+                }.withRel("car")
             )
         }
 }
@@ -40,5 +40,5 @@ data class CheckUpResource(
     val dateTime: LocalDateTime,
     val worker: String,
     val price: Int,
-    val car: Car,
+    val car: Car
 ) : RepresentationModel<CheckUpResource>()

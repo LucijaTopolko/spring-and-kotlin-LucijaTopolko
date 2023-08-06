@@ -1,9 +1,9 @@
 package academyproject.car.controller.dto
 
-import academyproject.checkup.controller.CarCheckUpController
 import academyproject.car.controller.CarController
 import academyproject.car.entity.Car
 import academyproject.car.entity.Model
+import academyproject.checkup.controller.CarCheckUpController
 import academyproject.checkup.entity.CarCheckUp
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PagedResourcesAssembler
@@ -19,7 +19,7 @@ import java.util.*
 @Component
 class CarResourceAssembler : RepresentationModelAssemblerSupport<Car, CarResource>(
     CarController::class.java,
-    CarResource::class.java,
+    CarResource::class.java
 ) {
 
     private val noPagination = Pageable.unpaged()
@@ -30,7 +30,7 @@ class CarResourceAssembler : RepresentationModelAssemblerSupport<Car, CarResourc
             add(
                 linkTo<CarCheckUpController> {
                     getCheckUps(sort = null, id = entity.carid, pageable = noPagination, pagedResourcesAssembler = nullAssembler)
-                }.withRel("checkup"),
+                }.withRel("checkup")
             )
         }
 
@@ -45,5 +45,5 @@ data class CarResource(
     val date: LocalDate,
     val model: Model,
     val year: Int,
-    val vin: String,
+    val vin: String
 ) : RepresentationModel<CarResource>()

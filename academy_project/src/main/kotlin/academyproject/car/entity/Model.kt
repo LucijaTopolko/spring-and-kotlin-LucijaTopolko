@@ -14,5 +14,5 @@ data class Model(
     val modelid: UUID = UUID.randomUUID(),
 
     val manufacturer: String,
-    val model: String,
+    val model: String
 )
