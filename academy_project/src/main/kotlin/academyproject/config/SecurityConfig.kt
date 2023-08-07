@@ -24,6 +24,9 @@ class SecurityConfig {
                 authorize("/api/v1/checkup/delete/{id}", hasRole("ADMIN"))
                 authorize(anyRequest, authenticated)
             }
+            oauth2ResourceServer {
+                jwt {}
+            }
         }
         return http.build()
     }
