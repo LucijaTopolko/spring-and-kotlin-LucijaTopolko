@@ -1,0 +1,12 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: "https://infinum.com"
+          jwk-set-uri: "http://localhost:8888/jwks.json"

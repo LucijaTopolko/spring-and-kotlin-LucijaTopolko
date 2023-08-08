@@ -1,7 +1,6 @@
 package academyproject.checkup.repository
 
 import academyproject.car.entity.Car
-import academyproject.checkup.controller.dto.AddCheckUpDTO
 import academyproject.checkup.controller.dto.Projection
 import academyproject.checkup.entity.CarCheckUp
 import org.springframework.data.domain.Page
@@ -18,4 +17,7 @@ interface CheckUpRepository : Repository<CarCheckUp, UUID> {
 
     fun findByCarOrderByDateTimeDesc(car: Car, pageable: Pageable): Page<CarCheckUp>
     fun findByCarOrderByDateTimeAsc(car: Car, pageable: Pageable): Page<CarCheckUp>
+
+    fun existsById(id: UUID): Boolean
+    fun deleteById(id: UUID)
 }

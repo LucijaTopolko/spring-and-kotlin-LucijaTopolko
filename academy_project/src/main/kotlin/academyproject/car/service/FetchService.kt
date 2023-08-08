@@ -16,13 +16,14 @@ class FetchService(
     fun fetch() {
         webClient
             .get()
+            .uri("https://62d922dd5d893b27b2df0731.mockapi.io/api/v1/cars/1")
             .retrieve()
             .bodyToMono<ManufacturerResponse>()
             .flatMapIterable { manufacturer -> manufacturer.cars }
             .flatMapIterable { car ->
                 car.models.map { model ->
-                    val inDataBase = modelRepository.findByManufacturerAndModel(car.manufacturer, model)
-                    if (inDataBase == null) {
+                    val inDataBase = modelRepository.existsByManufacturerAndModel(car.manufacturer, model)
+                    if (!inDataBase) {
                         val dto = Model(manufacturer = car.manufacturer, model = model)
                         modelRepository.save(dto)
                     }

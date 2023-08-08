@@ -13,4 +13,6 @@ interface ModelRepository : Repository<Model, UUID> {
     fun save(carDb: Model): Model
 
     fun existsByManufacturerAndModel(manufacturer: String, model: String): Boolean
+
+    fun deleteAll()
 }
