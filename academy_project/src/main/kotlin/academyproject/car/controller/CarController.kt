@@ -13,15 +13,13 @@ import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.* // ktlint-disable no-wildcard-imports
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 
 @RequestMapping("/api/v1/car")
 @Controller
 class CarController(
     private val carService: CarService,
-    private val resourceAssembler: CarResourceAssembler,
+    private val resourceAssembler: CarResourceAssembler
 ) {
 
     @GetMapping("/paged")
@@ -29,8 +27,8 @@ class CarController(
         return ResponseEntity.ok(
             pagedResourceAssembler.toModel(
                 carService.getAll(pageable),
-                resourceAssembler,
-            ),
+                resourceAssembler
+            )
         )
     }
 

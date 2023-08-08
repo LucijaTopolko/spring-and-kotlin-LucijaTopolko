@@ -9,14 +9,14 @@ data class AddCheckUpDTO(
     val dateTime: LocalDateTime,
     val worker: String,
     val price: Int,
-    val carid: UUID,
+    val carid: UUID
 ) {
     fun checkup(carFetch: (UUID) -> Car): CarCheckUp {
         return CarCheckUp(
             dateTime = dateTime,
             worker = worker,
             price = price,
-            car = carFetch.invoke(carid),
+            car = carFetch.invoke(carid)
         )
     }
 }

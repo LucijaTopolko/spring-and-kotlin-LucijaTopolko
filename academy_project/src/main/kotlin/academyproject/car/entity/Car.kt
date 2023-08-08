@@ -19,5 +19,5 @@ data class Car(
     val model: Model,
 
     var year: Int,
-    val vin: String,
+    val vin: String
 )

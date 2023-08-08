@@ -14,7 +14,7 @@ import java.util.*
 @Service
 class CarService(
     private val carRepository: CarRepository,
-    private val modelRepository: ModelRepository,
+    private val modelRepository: ModelRepository
 ) {
 
     fun addCar(car: AddCarDTO): CarDTO {
@@ -27,9 +27,9 @@ class CarService(
                     date = car.date,
                     year = car.year,
                     model = modelRepository.findByManufacturerAndModel(car.manufacturer, car.model),
-                    vin = car.vin,
-                ),
-            ),
+                    vin = car.vin
+                )
+            )
         )
     }
 

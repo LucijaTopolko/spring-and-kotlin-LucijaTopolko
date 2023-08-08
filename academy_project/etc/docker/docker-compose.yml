@@ -1,6 +1,14 @@
 version: "3"
 
 services:
+  app:
+    image: "academyproject/image"
+    ports:
+      - "8080:8080"
+    environment:
+      - "SPRING_DATASOURCE_URL=jdbc:postgresql://imdb-db-container:5433/checkupsdb"
+    depends_on:
+      - imdb-db-container
   imdb-db-container:
     image: "postgres:13-alpine"
     ports:

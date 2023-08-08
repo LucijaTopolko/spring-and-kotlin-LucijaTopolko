@@ -8,12 +8,12 @@ class CheckUpDTO(
     var id: UUID,
     val dateTime: LocalDateTime,
     val worker: String,
-    val price: Int,
+    val price: Int
 ) {
     constructor(checkUp: CarCheckUp) : this(
         checkUp.id,
         checkUp.dateTime,
         checkUp.worker,
-        checkUp.price,
+        checkUp.price
     )
 }

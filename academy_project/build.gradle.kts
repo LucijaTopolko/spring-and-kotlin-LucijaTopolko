@@ -7,6 +7,7 @@ plugins {
     kotlin("plugin.spring") version "1.7.0"
     kotlin("plugin.jpa") version "1.7.10"
     id("org.jlleitschuh.gradle.ktlint") version "11.5.0"
+    // id("com.google.cloud.tools.jib") version "3.2.1"
 }
 
 group = "academyproject"
@@ -14,6 +15,12 @@ version = "1.0.0"
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
+}
+
+configurations {
+    compileOnly {
+        extendsFrom(configurations.annotationProcessor.get())
+    }
 }
 
 repositories {
@@ -52,6 +59,8 @@ dependencies {
 
     runtimeOnly("org.postgresql:postgresql")
 
+    annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.mock-server:mockserver-spring-test-listener:5.11.2")
     testImplementation("org.springframework.security:spring-security-test")
@@ -60,7 +69,6 @@ dependencies {
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
 }
-
 
 dependencyManagement {
     imports {
@@ -77,6 +85,7 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+    systemProperty("spring.profiles.active", "test")
 }
 
 tasks.named<org.springframework.boot.gradle.tasks.bundling.BootJar>("bootJar") {

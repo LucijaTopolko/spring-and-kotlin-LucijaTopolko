@@ -20,7 +20,7 @@ import java.util.*
 @Controller
 class CarCheckUpController(
     private val checkUpService: CheckUpService,
-    private val resourceAssembler: CheckUpResourceAssembler,
+    private val resourceAssembler: CheckUpResourceAssembler
 ) {
     @GetMapping
     @ResponseBody
@@ -28,12 +28,12 @@ class CarCheckUpController(
         @PathVariable id: UUID,
         @RequestParam(required = false, defaultValue = "desc") sort: String?,
         pageable: Pageable,
-        pagedResourcesAssembler: PagedResourcesAssembler<CarCheckUp>,
+        pagedResourcesAssembler: PagedResourcesAssembler<CarCheckUp>
     ): ResponseEntity<PagedModel<CheckUpResource>> =
         ResponseEntity.ok(
             pagedResourcesAssembler.toModel(
                 checkUpService.getAll(sort, id, pageable),
-                resourceAssembler,
-            ),
+                resourceAssembler
+            )
         )
 }

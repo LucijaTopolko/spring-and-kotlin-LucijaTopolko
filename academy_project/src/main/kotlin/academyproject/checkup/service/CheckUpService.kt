@@ -15,7 +15,7 @@ import java.util.*
 @Service
 class CheckUpService(
     private val checkUpRepository: CheckUpRepository,
-    private val carRepository: CarRepository,
+    private val carRepository: CarRepository
 ) {
 
     fun addCheckUp(checkUp: AddCheckUpDTO): CheckUpDTO {
@@ -52,5 +52,4 @@ class CheckUpService(
         if (!checkUpRepository.existsById(id)) throw CheckUpNotFoundException()
         checkUpRepository.deleteById(id)
     }
-
 }

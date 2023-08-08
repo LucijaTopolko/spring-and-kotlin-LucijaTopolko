@@ -12,7 +12,7 @@ import java.util.*
 @RequestMapping("/api/v1/checkup")
 @Controller
 class CheckUpController(
-    private val checkUpService: CheckUpService,
+    private val checkUpService: CheckUpService
 ) {
 
     @PostMapping

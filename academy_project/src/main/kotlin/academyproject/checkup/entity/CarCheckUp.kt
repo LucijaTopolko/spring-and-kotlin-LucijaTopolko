@@ -18,5 +18,5 @@ data class CarCheckUp(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "carid")
-    val car: Car,
+    val car: Car
 )
